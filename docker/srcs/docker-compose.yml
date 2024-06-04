@@ -1,52 +1,57 @@
 version : '3.9'
 
-services : 
-  mariadb :
-    image : mariadb
-    container_name : mariadb
-    volumes :
-      - mariadb:/var/lib/mysql
-    networks : 
+services:
+  mariadb:
+    container_name: mariadb
+    image: mariadb
+    build:
+      context: ./requirements/mariadb/
+      dockerfile: Dockerfile
+    # volumes:
+    #   - mariadb:/var/lib/mysql
+    networks:
       - inception
-    build :
-      - context : /requirements/mariadb
-      - dockerfile : Dockerfile
-    env_file : .env
-    expose :
+    env_file:
+      - .env
+    expose:
       - "3306"
-    restart : on-failure
 
-  wordpress :
-    image : wordpress
-    container_name : wordpress
-    volumes :
-      - wordpress:/var/www/wordpress
-    networks :
+  wordpress:
+    container_name: wordpress
+    image: wordpress
+    build:
+      context: ./requirements/wordpress/
+      dockerfile: Dockerfile
+    # volumes:
+    #   - wordpress:/var/www/html
+    networks:
       - inception
-    build : 
-      - context : /requirements/wordpress
-      - dockerfile : Dockerfile
-    env_file : .env
-    ports : 
-      - "443:443"
-    restart : on-failure
-
-  nginx :
-    image : nginx
-    container_name : nginx
-    volumes :
-      wordpress:/var/www/wordpress
-    build :
-      context : /requirements/nginx
-      dockerfile : Dockerfile
-    networks :
-      - inception
-    env_file : .env
-    expose : 
+    depends_on:
+      - mariadb
+    env_file:
+      - .env
+    expose:
       - "9000"
 
+  nginx:
+    container_name: nginx
+    image: nginx
+    build:
+      context: ./requirements/nginx/
+      dockerfile: Dockerfile
+    # volumes:
+    #   - wordpress:/var/www/html
+    networks:
+      - inception
+    depends_on:
+      - wordpress
+    env_file:
+      - .env
+    ports:
+      - "443:443"
+
+
 # volumes : 
-
-
-  
-  
+networks:
+  inception:
+    driver: bridge
