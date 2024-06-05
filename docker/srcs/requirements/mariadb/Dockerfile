@@ -8,6 +8,4 @@ COPY /tools/sql.sh /
 
 RUN chmod +x /sql.sh
 
-EXPOSE 3309
-
 CMD ["sh", "/sql.sh"]
