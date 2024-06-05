@@ -2,10 +2,14 @@ FROM debian:bookworm
 
 RUN apt-get update && apt-get install -y mariadb-server
 
-# COPY conf/mariadb.conf /etc/mysql/mariadb.conf.d/
+RUN mkdir -p /var/run/mysqld
+
+RUN chmod 777 /var /var/run /var/run/mysqld /run/mysqld /var/lib/mysql
 
 COPY /tools/sql.sh /
 
 RUN chmod +x /sql.sh
 
-CMD ["sh", "/sql.sh"]
+ENTRYPOINT ["sh", "/sql.sh"]
+
+CMD ["mariadbd", "--user=mysql", "--bind-address=0.0.0.0"]
