@@ -7,8 +7,8 @@ services:
     build:
       context: ./requirements/mariadb/
       dockerfile: Dockerfile
-    # volumes:
-    #   - mariadb:/var/lib/mysql
+    volumes:
+      - mariadb:/var/lib/mysql
     networks:
       - inception
     env_file:
@@ -22,8 +22,8 @@ services:
     build:
       context: ./requirements/wordpress/
       dockerfile: Dockerfile
-    # volumes:
-    #   - wordpress:/var/www/html
+    volumes:
+      - wordpress:/var/www/html
     networks:
       - inception
     depends_on:
@@ -39,8 +39,8 @@ services:
     build:
       context: ./requirements/nginx/
       dockerfile: Dockerfile
-    # volumes:
-    #   - wordpress:/var/www/html
+    volumes:
+      - wordpress:/var/www/html
     networks:
       - inception
     depends_on:
@@ -51,7 +51,20 @@ services:
       - "443:443"
 
 
-# volumes : 
+volumes : 
+  mariadb:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/miroka/mariadb
+  wordpress:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/miroka/wordpress
+
 networks:
   inception:
     driver: bridge
