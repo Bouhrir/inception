@@ -7,6 +7,6 @@ clean :
 
 fclean : clean
 	@docker system prune -af
-	rm -rf /home/miroka/mariadb/ /home/miroka/wordpress/
+	@rm -rf /home/miroka/mariadb/ /home/miroka/wordpress/
 
 re : clean all
