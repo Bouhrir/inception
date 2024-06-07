@@ -12,7 +12,7 @@ services:
     networks:
       - inception
     env_file:
-      - .env
+      - .env.test
     expose:
       - "3306"
 
@@ -29,7 +29,7 @@ services:
     depends_on:
       - mariadb
     env_file:
-      - .env
+      - .env.test
     expose:
       - "9000"
 
@@ -46,7 +46,7 @@ services:
     depends_on:
       - wordpress
     env_file:
-      - .env
+      - .env.test
     ports:
       - "443:443"
 
